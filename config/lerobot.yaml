@@ -1,0 +1,39 @@
+# SAEDGE Embodied AI Studio - LeRobot / ACT configuration
+# Used on the Jetson Orin Nano Super for imitation learning.
+
+robot:
+  type: so101
+  leader_port: /dev/so101_leader
+  follower_port: /dev/so101_follower
+  baudrate: 1000000
+
+cameras:
+  environment:
+    index: 0
+    width: 640
+    height: 480
+    fps: 15
+  wrist:
+    index: 2
+    width: 640
+    height: 480
+    fps: 15
+
+act:
+  model_path: models/act/
+  image_width: 640
+  image_height: 480
+  chunk_size: 50
+  device: cpu
+
+training:
+  enabled: false
+  batch_size: 16
+  epochs: 200
+  learning_rate: 1e-4
+  # Disable training while autonomous robot operation is active
+
+safety:
+  emergency_stop: true
+  watchdog_timeout_sec: 2.0
+  exclusive_ownership: true

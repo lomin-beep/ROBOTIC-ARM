@@ -1,0 +1,33 @@
+# SAEDGE Embodied AI Studio - multi-service composition
+#
+#   docker compose up --build
+#
+# Backend: FastAPI on http://localhost:8000
+# Frontend: React dev server on http://localhost:5173 (proxies /api and /ws to backend)
+
+version: "3.8"
+
+services:
+  backend:
+    build: .
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./datasets:/app/datasets
+      - ./models:/app/models
+      - ./calibration:/app/calibration
+      - ./logs:/app/logs
+    restart: unless-stopped
+
+  frontend:
+    image: node:22-alpine
+    working_dir: /app/frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app/frontend
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      - backend
+    restart: unless-stopped
